@@ -1,0 +1,133 @@
+{
+    "data": [
+        {
+            "id": 135,
+            "attributes": {
+                "title": "Welcome to ISTAD community 2022",
+                "slug": "welcome-to-istad-community-2023",
+                "status": true,
+                "content": "ISTAD is a noteworthy science and technology institute in Cambodia. ISTAD has routed Cambodian students to advanced science and technology, research, and develop digital skills and our graduates have been guaranteed excellent job opportunities with the Top IT company. ISTAD will continue to provide high-quality training with the latest methodology, and roadmap as well as the best choice for those who want to be an IT expert in Cambodia.",
+                "createdAt": "2022-10-09T03:55:06.374Z",
+                "updatedAt": "2022-10-09T03:55:06.374Z",
+                "publishedAt": "2022-10-09T03:55:06.372Z",
+                "thumbnail": {
+                    "data": {
+                        "id": 3,
+                        "attributes": {
+                            "name": "1_vTLOUrJWoo4Kzj7ly8o0jA.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 2048,
+                            "height": 1367,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png",
+                                    "hash": "large_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe",
+                                    "mime": "image/png",
+                                    "name": "large_1_vTLOUrJWoo4Kzj7ly8o0jA.png",
+                                    "path": null,
+                                    "size": 302,
+                                    "width": 1000,
+                                    "height": 667
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png",
+                                    "hash": "small_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe",
+                                    "mime": "image/png",
+                                    "name": "small_1_vTLOUrJWoo4Kzj7ly8o0jA.png",
+                                    "path": null,
+                                    "size": 107.68,
+                                    "width": 500,
+                                    "height": 334
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png",
+                                    "hash": "medium_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe",
+                                    "mime": "image/png",
+                                    "name": "medium_1_vTLOUrJWoo4Kzj7ly8o0jA.png",
+                                    "path": null,
+                                    "size": 198.02,
+                                    "width": 750,
+                                    "height": 501
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png",
+                                    "hash": "thumbnail_1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1_vTLOUrJWoo4Kzj7ly8o0jA.png",
+                                    "path": null,
+                                    "size": 31.25,
+                                    "width": 234,
+                                    "height": 156
+                                }
+                            },
+                            "hash": "1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 327.77,
+                            "url": "/uploads/1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2022-09-26T10:13:52.196Z",
+                            "updatedAt": "2022-09-26T10:36:37.620Z"
+                        }
+                    }
+                },
+                "category": {
+                    "data": {
+                        "id": 1,
+                        "attributes": {
+                            "title": "Web Design",
+                            "description": "Web Design course is designed for students to get started with Design Website Concepts. This course will focus on basic and advanced layout of website plus responsive design including UI/UX Design Concept. Moreover, CMS & Dynamic content with hosting application to access in public.",
+                            "createdAt": "2022-09-26T15:36:36.841Z",
+                            "updatedAt": "2022-09-26T15:36:43.954Z",
+                            "publishedAt": "2022-09-26T15:36:43.950Z",
+                            "status": true
+                        }
+                    }
+                },
+                "tags": {
+                    "data": [
+                        {
+                            "id": 1,
+                            "attributes": {
+                                "title": "HTML",
+                                "status": true,
+                                "createdAt": "2022-09-26T15:36:59.112Z",
+                                "updatedAt": "2022-09-26T15:37:00.023Z",
+                                "publishedAt": "2022-09-26T15:37:00.018Z"
+                            }
+                        }
+                    ]
+                },
+                "users_permissions_user": {
+                    "data": {
+                        "id": 1,
+                        "attributes": {
+``                            "username": "ILJiMae",
+                            "email": "chhaya.devkh@gmail.com",
+                            "provider": "local",
+                            "confirmed": true,
+                            "blocked": false,
+                            "createdAt": "2022-09-26T15:25:33.436Z",
+                            "updatedAt": "2022-09-26T15:25:47.175Z"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "page": 1,
+            "pageSize": 25,
+            "pageCount": 1,
+            "total": 1
+        }
+    }
+}
