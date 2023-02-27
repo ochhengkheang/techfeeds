@@ -1,0 +1,30 @@
+{
+    "data": [
+        {
+            "id": 186,
+            "attributes": {
+                "title": "asdfsafsdfdf",
+                "slug": "asdfsafsdfdfxyz",
+                "status": true,
+                "content": "sdfdfdfdfdfdfdfd",
+                "createdAt": "2022-10-28T05:50:04.154Z",
+                "updatedAt": "2022-10-28T05:50:04.154Z",
+                "publishedAt": "2022-10-28T05:50:04.148Z",
+                "thumbnail": {
+                    "data": {
+                        "id": 44
+                    },
+                    "url": "/uploads/scaled_image_picker4531464925586327442_9a3aacc18a.jpg"
+                }
+            }
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "page": 1,
+            "pageSize": 10,
+            "pageCount": 9,
+            "total": 86
+        }
+    }
+}
