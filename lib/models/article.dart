@@ -99,17 +99,13 @@ class Attributes {
 }
 
 class Thumbnail {
-  ThumbnailData? data;
-  ThumbnailAttributes? attributes;
+  Thumbnaildata? data;
 
-  Thumbnail({this.data, this.attributes});
+  Thumbnail({this.data});
 
   Thumbnail.fromJson(Map<String, dynamic> json) {
     data =
-        json['data'] != null ? new ThumbnailData.fromJson(json['data']) : null;
-    attributes = json['attributes'] != null
-        ? new ThumbnailAttributes.fromJson(json['attributes'])
-        : null;
+        json['data'] != null ? new Thumbnaildata.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -117,6 +113,26 @@ class Thumbnail {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    return data;
+  }
+}
+
+class Thumbnaildata {
+  int? id;
+  Thumbnailattributes? attributes;
+
+  Thumbnaildata({this.id, this.attributes});
+
+  Thumbnaildata.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    attributes = json['attributes'] != null
+        ? new Thumbnailattributes.fromJson(json['attributes'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     if (this.attributes != null) {
       data['attributes'] = this.attributes!.toJson();
     }
@@ -124,54 +140,17 @@ class Thumbnail {
   }
 }
 
-class ThumbnailData {
-  int? id;
-
-  ThumbnailData({this.id});
-
-  ThumbnailData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    return data;
-  }
-}
-
-class ThumbnailAttributes {
-  String? name;
-  Null? alternativeText;
-  Null? caption;
-  int? width;
-  int? height;
+class Thumbnailattributes {
   String? url;
 
-  ThumbnailAttributes(
-      {this.name,
-      this.alternativeText,
-      this.caption,
-      this.width,
-      this.height,
-      this.url});
+  Thumbnailattributes({this.url});
 
-  ThumbnailAttributes.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    alternativeText = json['alternativeText'];
-    caption = json['caption'];
-    width = json['width'];
-    height = json['height'];
+  Thumbnailattributes.fromJson(Map<String, dynamic> json) {
     url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['alternativeText'] = this.alternativeText;
-    data['caption'] = this.caption;
-    data['width'] = this.width;
-    data['height'] = this.height;
     data['url'] = this.url;
     return data;
   }

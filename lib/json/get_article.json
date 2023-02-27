@@ -1,26 +1,21 @@
 {
     "data": [
         {
-            "id": 186,
+            "id": 135,
             "attributes": {
-                "title": "asdfsafsdfdf",
-                "slug": "asdfsafsdfdfxyz",
+                "title": "Welcome to ISTAD community 2022",
+                "slug": "welcome-to-istad-community-2023",
                 "status": true,
-                "content": "sdfdfdfdfdfdfdfd",
-                "createdAt": "2022-10-28T05:50:04.154Z",
-                "updatedAt": "2022-10-28T05:50:04.154Z",
-                "publishedAt": "2022-10-28T05:50:04.148Z",
+                "content": "ISTAD is a noteworthy science and technology institute in Cambodia. ISTAD has routed Cambodian students to advanced science and technology, research, and develop digital skills and our graduates have been guaranteed excellent job opportunities with the Top IT company. ISTAD will continue to provide high-quality training with the latest methodology, and roadmap as well as the best choice for those who want to be an IT expert in Cambodia.",
+                "createdAt": "2022-10-09T03:55:06.374Z",
+                "updatedAt": "2022-10-09T03:55:06.374Z",
+                "publishedAt": "2022-10-09T03:55:06.372Z",
                 "thumbnail": {
-                    "data": {
-                        "id": 44
-                    },
-                    "attributes": {
-                        "name": "1_vTLOUrJWoo4Kzj7ly8o0jA.png",
-                        "alternativeText": null,
-                        "caption": null,
-                        "width": 2048,
-                        "height": 1367,
-                        "url": "/uploads/1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png"
+                    "tdata": {
+                        "id": 3,
+                        "tattributes": {
+                            "url": "/uploads/1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png"
+                        }
                     }
                 }
             }
@@ -29,9 +24,9 @@
     "meta": {
         "pagination": {
             "page": 1,
-            "pageSize": 10,
-            "pageCount": 9,
-            "total": 86
+            "pageSize": 25,
+            "pageCount": 1,
+            "total": 1
         }
     }
 }

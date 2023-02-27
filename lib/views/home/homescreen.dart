@@ -106,9 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ListTile(
                     title: Text('${article?.title}'),
                     subtitle: Text(
-                        '${article?.content}, ${article?.thumbnail?.data?.id}'),
-                    // leading: Image.network(
-                    //     'https://cms.istad.co/${article?.thumbnail?.data?.id}'),
+                        '${article?.content}, ${article?.thumbnail?.data?.id}, ${article?.thumbnail?.data?.attributes?.url}'),
+                    //error fetch image if not put null condition
+                    leading: article?.thumbnail?.data == null
+                        ? CircularProgressIndicator()
+                        : Image.network(
+                            'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}'),
                   );
                 },
               );
