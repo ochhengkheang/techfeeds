@@ -91,13 +91,27 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ChangeNotifierProvider<ArticleViewModel>(
         create: (BuildContext ctx) => articleViewModel,
-        child: Consumer<ArticleViewModel>(builder: (context, article, _) {
-          var status = article.apiResponse.status;
+        child: Consumer<ArticleViewModel>(builder: (context, articles, _) {
+          var status = articles.apiResponse.status;
           switch (status) {
             case Status.LOADING:
               return const CircularProgressIndicator();
             case Status.COMPLETED:
-              return Center(child: Text("Gello Flutter"));
+              var length = articles.apiResponse.data!.data!.length;
+              return ListView.builder(
+                itemCount: length,
+                itemBuilder: (context, index) {
+                  var article =
+                      articles.apiResponse.data!.data![index].attributes;
+                  return ListTile(
+                    title: Text('${article?.title}'),
+                    subtitle: Text(
+                        '${article?.content}, ${article?.thumbnail?.data?.id}'),
+                    // leading: Image.network(
+                    //     'https://cms.istad.co/${article?.thumbnail?.data?.id}'),
+                  );
+                },
+              );
             default:
               return Center(child: Text("Default"));
           }

@@ -14,7 +14,14 @@
                     "data": {
                         "id": 44
                     },
-                    "url": "/uploads/scaled_image_picker4531464925586327442_9a3aacc18a.jpg"
+                    "attributes": {
+                        "name": "1_vTLOUrJWoo4Kzj7ly8o0jA.png",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 2048,
+                        "height": 1367,
+                        "url": "/uploads/1_v_TLO_Ur_J_Woo4_Kzj7ly8o0j_A_8634cdefbe.png"
+                    }
                 }
             }
         }

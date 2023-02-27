@@ -100,14 +100,16 @@ class Attributes {
 
 class Thumbnail {
   ThumbnailData? data;
-  String? url;
+  ThumbnailAttributes? attributes;
 
-  Thumbnail({this.data, this.url});
+  Thumbnail({this.data, this.attributes});
 
   Thumbnail.fromJson(Map<String, dynamic> json) {
     data =
         json['data'] != null ? new ThumbnailData.fromJson(json['data']) : null;
-    url = json['url'];
+    attributes = json['attributes'] != null
+        ? new ThumbnailAttributes.fromJson(json['attributes'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -115,7 +117,9 @@ class Thumbnail {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['url'] = this.url;
+    if (this.attributes != null) {
+      data['attributes'] = this.attributes!.toJson();
+    }
     return data;
   }
 }
@@ -132,6 +136,43 @@ class ThumbnailData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    return data;
+  }
+}
+
+class ThumbnailAttributes {
+  String? name;
+  Null? alternativeText;
+  Null? caption;
+  int? width;
+  int? height;
+  String? url;
+
+  ThumbnailAttributes(
+      {this.name,
+      this.alternativeText,
+      this.caption,
+      this.width,
+      this.height,
+      this.url});
+
+  ThumbnailAttributes.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    alternativeText = json['alternativeText'];
+    caption = json['caption'];
+    width = json['width'];
+    height = json['height'];
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['alternativeText'] = this.alternativeText;
+    data['caption'] = this.caption;
+    data['width'] = this.width;
+    data['height'] = this.height;
+    data['url'] = this.url;
     return data;
   }
 }
