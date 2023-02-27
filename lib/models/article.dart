@@ -1,3 +1,4 @@
+//add extra name c and t on data and attributes to avoid converting errors, then rename them later
 class ArticleModel {
   List<Data>? data;
   Meta? meta;
@@ -58,6 +59,7 @@ class Attributes {
   String? updatedAt;
   String? publishedAt;
   Thumbnail? thumbnail;
+  Category? category;
 
   Attributes(
       {this.title,
@@ -67,7 +69,8 @@ class Attributes {
       this.createdAt,
       this.updatedAt,
       this.publishedAt,
-      this.thumbnail});
+      this.thumbnail,
+      this.category});
 
   Attributes.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -79,6 +82,9 @@ class Attributes {
     publishedAt = json['publishedAt'];
     thumbnail = json['thumbnail'] != null
         ? new Thumbnail.fromJson(json['thumbnail'])
+        : null;
+    category = json['category'] != null
+        ? new Category.fromJson(json['category'])
         : null;
   }
 
@@ -94,18 +100,21 @@ class Attributes {
     if (this.thumbnail != null) {
       data['thumbnail'] = this.thumbnail!.toJson();
     }
+    if (this.category != null) {
+      data['category'] = this.category!.toJson();
+    }
     return data;
   }
 }
 
 class Thumbnail {
-  Thumbnaildata? data;
+  ThumbnailData? data;
 
   Thumbnail({this.data});
 
   Thumbnail.fromJson(Map<String, dynamic> json) {
     data =
-        json['data'] != null ? new Thumbnaildata.fromJson(json['data']) : null;
+        json['data'] != null ? new ThumbnailData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -117,16 +126,16 @@ class Thumbnail {
   }
 }
 
-class Thumbnaildata {
+class ThumbnailData {
   int? id;
-  Thumbnailattributes? attributes;
+  ThumbnailAttributes? attributes;
 
-  Thumbnaildata({this.id, this.attributes});
+  ThumbnailData({this.id, this.attributes});
 
-  Thumbnaildata.fromJson(Map<String, dynamic> json) {
+  ThumbnailData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     attributes = json['attributes'] != null
-        ? new Thumbnailattributes.fromJson(json['attributes'])
+        ? new ThumbnailAttributes.fromJson(json['attributes'])
         : null;
   }
 
@@ -140,18 +149,76 @@ class Thumbnaildata {
   }
 }
 
-class Thumbnailattributes {
+class ThumbnailAttributes {
   String? url;
 
-  Thumbnailattributes({this.url});
+  ThumbnailAttributes({this.url});
 
-  Thumbnailattributes.fromJson(Map<String, dynamic> json) {
+  ThumbnailAttributes.fromJson(Map<String, dynamic> json) {
     url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['url'] = this.url;
+    return data;
+  }
+}
+
+class Category {
+  CategoryData? data;
+
+  Category({this.data});
+
+  Category.fromJson(Map<String, dynamic> json) {
+    data =
+        json['data'] != null ? new CategoryData.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class CategoryData {
+  int? id;
+  CategoryAttributes? attributes;
+
+  CategoryData({this.id, this.attributes});
+
+  CategoryData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    attributes = json['attributes'] != null
+        ? new CategoryAttributes.fromJson(json['attributes'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    if (this.attributes != null) {
+      data['attributes'] = this.attributes!.toJson();
+    }
+    return data;
+  }
+}
+
+class CategoryAttributes {
+  String? title;
+
+  CategoryAttributes({this.title});
+
+  CategoryAttributes.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
     return data;
   }
 }
