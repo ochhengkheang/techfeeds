@@ -9,7 +9,7 @@ class ArticleRepository {
   Future<ArticleModel> getArticle(page, limit) async {
     try {
       var url =
-          '${AppUrl.getCategory}&pagination%5Bpage%5D=$page&pagination%5BpageSize%5D=$limit';
+          '${AppUrl.getCategory}?pagination%5Bpage%5D=$page&pagination%5BpageSize%5D=$limit&populate=thumbnail';
       print('url $url');
       dynamic response = await _apiService.getApiResponse(url);
       return response = ArticleModel.fromJson(response);

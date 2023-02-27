@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -87,11 +89,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-        child: Column(
-          children: [],
-        ),
+      body: ChangeNotifierProvider<ArticleViewModel>(
+        create: (BuildContext ctx) => articleViewModel,
+        child: Consumer<ArticleViewModel>(builder: (context, article, _) {
+          var status = article.apiResponse.status;
+          switch (status) {
+            case Status.LOADING:
+              return const CircularProgressIndicator();
+            case Status.COMPLETED:
+              return Center(child: Text("Gello Flutter"));
+            default:
+              return Center(child: Text("Default"));
+          }
+        }),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: darkBlue,
