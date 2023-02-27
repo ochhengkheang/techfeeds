@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var lightGreen = Color.fromRGBO(79, 192, 159, 1);
   var fontStyleCategory = GoogleFonts.poppins(
       fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16);
+  var fontStyleSemiBold = GoogleFonts.poppins(
+      fontWeight: FontWeight.w500, color: Colors.black, fontSize: 12);
 
   var onCategory = 1;
   var page = 1;
@@ -41,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             AppBar(
               toolbarHeight: 70.0,
-              //elevation: 0.0,
+              elevation: 0.0,
               automaticallyImplyLeading: false,
               flexibleSpace: Container(),
               actions: [
@@ -96,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
           var status = articles.apiResponse.status;
           switch (status) {
             case Status.LOADING:
-              return const CircularProgressIndicator();
+              return Center(child: const CircularProgressIndicator());
             case Status.COMPLETED:
               data.addAll(articles.apiResponse.data!.data!);
               var length = articles.apiResponse.data!.data!.length;
@@ -117,15 +122,56 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else {
                       var article =
                           articles.apiResponse.data!.data![index].attributes;
-                      return ListTile(
-                        title: Text('${article?.title}'),
-                        subtitle: Text(
-                            '${article?.content}, ${article?.thumbnail?.data?.id}, ${article?.thumbnail?.data?.attributes?.url}, ${article?.category?.data?.attributes?.title}'),
-                        //error fetch image if not put null condition
-                        leading: article?.thumbnail?.data == null
-                            ? CircularProgressIndicator()
-                            : Image.network(
-                                'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}'),
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
+                        child: Card(
+                          elevation: 2,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: article?.thumbnail?.data == null
+                                      ? CircularProgressIndicator()
+                                      : Image.network(
+                                          fit: BoxFit.fitWidth,
+                                          width: 333,
+                                          height: 187,
+                                          'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}'),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                                  child: Row(children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: lightGreen,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(6))),
+                                      padding: EdgeInsets.all(4),
+                                      child: Text(
+                                          "# ${article?.category?.data?.attributes?.title}",
+                                          style: fontStyleSemiBold),
+                                    ),
+                                    //space to align left and right
+                                    Spacer(),
+                                    Text(
+                                        "${article?.publishedAt?.substring(0, 10)}",
+                                        style: fontStyleSemiBold),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.more_vert_outlined),
+                                        color: lightGreen),
+                                  ]),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                                  child: Text("${article?.title}",
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.bold,
+                                          color: darkBlue,
+                                          fontSize: 22)),
+                                ),
+                              ]),
+                        ),
                       );
                     }
                   },
