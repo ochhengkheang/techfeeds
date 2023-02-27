@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:techfeeds/view_models/article_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,20 @@ class _HomeScreenState extends State<HomeScreen> {
   var lightGreen = Color.fromRGBO(79, 192, 159, 1);
   var fontStyleCategory = GoogleFonts.poppins(
       fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16);
+
   var onCategory = 1;
+  var page = 1;
+  var data = [];
+  bool isLoading = false;
+
+  var _scrollController = ScrollController();
+  var articleViewModel = ArticleViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    articleViewModel.getArticles(1, 10);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,5 +119,22 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       },
     );
+  }
+
+  void onScrollToTheMaxBottom() async {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      if (page != 3) {
+        setState(() {
+          isLoading = true;
+        });
+        page += 1;
+        await articleViewModel.getArticles(page, 14);
+
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 }
