@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     articleViewModel.getArticles(1, 10);
+    _scrollController.addListener(onScrollToTheMaxBottom);
   }
 
   @override
@@ -97,23 +98,32 @@ class _HomeScreenState extends State<HomeScreen> {
             case Status.LOADING:
               return const CircularProgressIndicator();
             case Status.COMPLETED:
+              data.addAll(articles.apiResponse.data!.data!);
               var length = articles.apiResponse.data!.data!.length;
-              return ListView.builder(
-                itemCount: length,
-                itemBuilder: (context, index) {
-                  var article =
-                      articles.apiResponse.data!.data![index].attributes;
-                  return ListTile(
-                    title: Text('${article?.title}'),
-                    subtitle: Text(
-                        '${article?.content}, ${article?.thumbnail?.data?.id}, ${article?.thumbnail?.data?.attributes?.url}'),
-                    //error fetch image if not put null condition
-                    leading: article?.thumbnail?.data == null
-                        ? CircularProgressIndicator()
-                        : Image.network(
-                            'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}'),
-                  );
+              return RefreshIndicator(
+                onRefresh: () async {
+                  page = 1;
+                  data.clear();
+                  articleViewModel.getArticles(page, 10);
                 },
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: length,
+                  itemBuilder: (context, index) {
+                    var article =
+                        articles.apiResponse.data!.data![index].attributes;
+                    return ListTile(
+                      title: Text('${article?.title}'),
+                      subtitle: Text(
+                          '${article?.content}, ${article?.thumbnail?.data?.id}, ${article?.thumbnail?.data?.attributes?.url}'),
+                      //error fetch image if not put null condition
+                      leading: article?.thumbnail?.data == null
+                          ? CircularProgressIndicator()
+                          : Image.network(
+                              'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}'),
+                    );
+                  },
+                ),
               );
             default:
               return Center(child: Text("Default"));
@@ -161,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
           isLoading = true;
         });
         page += 1;
-        await articleViewModel.getArticles(page, 14);
+        await articleViewModel.getArticles(page, 10);
 
         setState(() {
           isLoading = false;
