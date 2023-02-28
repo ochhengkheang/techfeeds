@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
+                  //extract to categoryWidget class later if have time
                   textButton(Icons.home, 1, "ALL"),
                   textButton(Icons.web, 2, "Web Developer"),
                   textButton(Icons.code, 3, "Programming"),

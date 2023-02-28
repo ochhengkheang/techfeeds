@@ -52,15 +52,21 @@ class ArticleCard extends StatelessWidget {
                 color: Colors.white,
                 itemBuilder: (BuildContext context) => [
                   PopupMenuItem(
-                      child: TextButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.edit_note),
-                          label: Text("Update"))),
+                      child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit_note),
+                      Text('Edit', style: fontStyleSemiBold),
+                    ],
+                  )),
                   PopupMenuItem(
-                      child: TextButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.delete_forever_outlined),
-                          label: Text("Delete"))),
+                      child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.delete_forever_outlined),
+                      Text('Delete', style: fontStyleSemiBold),
+                    ],
+                  )),
                 ],
               ),
             ]),
