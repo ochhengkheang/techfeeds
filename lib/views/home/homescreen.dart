@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
+import 'package:techfeeds/views/article_detail/detailscreen.dart';
 import 'package:techfeeds/views/home/widget/article_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var onCategory = 1;
   var page = 1;
+  int? maxPage;
   var data = [];
   bool isLoading = false;
 
@@ -52,7 +54,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   width: 85,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailScreen()));
+                      },
                       child: Text("POST",
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
@@ -84,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 children: [
                   //extract to categoryWidget class later if have time
+                  //each button fetch it own data base on category name search
                   textButton(Icons.home, 1, "ALL"),
                   textButton(Icons.web, 2, "Web Developer"),
                   textButton(Icons.code, 3, "Programming"),
@@ -120,6 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (index == length) {
                       return Center(child: CircularProgressIndicator());
                     } else {
+                      //initilizie too many time
+                      maxPage = articles
+                          .apiResponse.data?.meta?.pagination?.pageCount;
+
                       var article =
                           articles.apiResponse.data!.data![index].attributes;
                       return ArticleCard(
@@ -172,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void onScrollToTheMaxBottom() async {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      if (page != 5) {
+      if (page != maxPage) {
         setState(() {
           isLoading = true;
           page += 1;
