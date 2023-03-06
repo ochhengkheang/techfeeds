@@ -8,6 +8,7 @@ import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/models/article.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
 import 'package:techfeeds/view_models/image_view_model.dart';
+import 'package:techfeeds/views/add_article/widget/article_textfield.dart';
 import 'package:techfeeds/views/home/homescreen.dart';
 
 class AddScreen extends StatefulWidget {
@@ -156,14 +157,20 @@ class _AddScreenState extends State<AddScreen> {
                     color: darkBlue,
                   ),
                   spacing(),
-                  articleTextField(titleController, "Title", 1),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  articleTextField(contentController, "Content", 6),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  articleTextField(
+                      darkBlue: darkBlue,
+                      lightGreen: lightGreen,
+                      controller: titleController,
+                      title: "Title",
+                      maxLine: 1),
+                  spacing(),
+                  articleTextField(
+                      darkBlue: darkBlue,
+                      lightGreen: lightGreen,
+                      controller: contentController,
+                      title: "Content",
+                      maxLine: 6),
+                  spacing(),
                 ],
               ),
             )),
@@ -174,27 +181,6 @@ class _AddScreenState extends State<AddScreen> {
   SizedBox spacing() {
     return SizedBox(
       height: 10,
-    );
-  }
-
-  TextField articleTextField(var controller, var title, var maxLine) {
-    return TextField(
-      style: TextStyle(color: Colors.white),
-      maxLines: maxLine,
-      controller: controller,
-      decoration: InputDecoration(
-        fillColor: darkBlue,
-        filled: true,
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: darkBlue, width: 2),
-            borderRadius: BorderRadius.circular(20)),
-        labelStyle: TextStyle(
-            color: lightGreen,
-            fontFamily: GoogleFonts.poppins().fontFamily,
-            fontSize: 15,
-            fontWeight: FontWeight.w600),
-        labelText: title,
-      ),
     );
   }
 }
