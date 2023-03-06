@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:techfeeds/data/network/network_api_service.dart';
 import 'package:techfeeds/models/article.dart';
+import 'package:techfeeds/models/article_reponse.dart';
+import 'package:techfeeds/models/article_request.dart';
+import 'package:techfeeds/models/image_response.dart';
 import 'package:techfeeds/res/app_url.dart';
 
 class ArticleRepository {
@@ -16,6 +19,27 @@ class ArticleRepository {
       dynamic response = await _apiService.getApiResponse(url);
       return response = ArticleModel.fromJson(response);
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future postArticle(dataRequest) async {
+    try {
+      var data = ArticleRequest(data: dataRequest);
+      var article = ArticleRequest(data: dataRequest);
+      var response =
+          await _apiService.postApi(AppUrl.getArticle, article.toJson());
+      return response = ArticleResponse.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ImageResponse> uploadImage(file) async {
+    try {
+      var response = await _apiService.uploadImage(AppUrl.uploadImage, file);
+      return response = ImageResponse.fromJson(response);
+    } catch (e) {
       rethrow;
     }
   }

@@ -1,0 +1,14 @@
+{
+    "data": {
+        "id": 342,
+        "attributes": {
+            "title": "My name is jeff",
+            "slug": "My-name-is-jeff-1322244562123990",
+            "status": true,
+            "content": "My name is jeff",
+            "createdAt": "2023-03-06T08:06:39.963Z",
+            "updatedAt": "2023-03-06T08:06:39.963Z",
+            "publishedAt": "2023-03-06T08:06:39.959Z"
+        }
+    }
+}

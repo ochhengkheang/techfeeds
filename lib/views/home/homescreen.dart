@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
+import 'package:techfeeds/views/add_article/add_screen.dart';
 import 'package:techfeeds/views/article_detail/detailscreen.dart';
 import 'package:techfeeds/views/home/widget/article_card.dart';
 
@@ -21,6 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
       fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16);
   var fontStyleSemiBold = GoogleFonts.poppins(
       fontWeight: FontWeight.w500, color: Colors.black, fontSize: 12);
+  var fontStyleBold = GoogleFonts.poppins(
+      fontWeight: FontWeight.bold,
+      color: Color.fromRGBO(79, 192, 159, 1),
+      fontSize: 22);
 
   var onCategory = 1;
   var page = 1;
@@ -58,13 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DetailScreen()));
+                                builder: (context) => AddScreen()));
                       },
-                      child: Text("POST",
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              color: lightGreen,
-                              fontSize: 22))),
+                      child: Text("POST", style: fontStyleBold)),
                 )
               ],
               backgroundColor: Colors.white,
@@ -113,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             case Status.COMPLETED:
               data.addAll(articles.apiResponse.data!.data!);
               var length = articles.apiResponse.data!.data!.length;
+              maxPage = articles.apiResponse.data?.meta?.pagination?.pageCount;
               return RefreshIndicator(
                 onRefresh: () async {
                   page = 1;
@@ -121,17 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: ListView.builder(
                   controller: _scrollController,
-                  //
                   itemCount: isLoading ? length + 1 : length,
                   itemBuilder: (context, index) {
                     //check index to length to avoid array error
                     if (index == length) {
                       return Center(child: CircularProgressIndicator());
                     } else {
-                      //initilizie too many time
-                      maxPage = articles
-                          .apiResponse.data?.meta?.pagination?.pageCount;
-
                       var article =
                           articles.apiResponse.data!.data![index].attributes;
                       return ArticleCard(
