@@ -51,39 +51,33 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             AppBar(
-              toolbarHeight: 70.0,
-              elevation: 0.0,
-              automaticallyImplyLeading: false,
-              flexibleSpace: Container(),
-              actions: [
-                SizedBox(
-                  width: 85,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddScreen()));
-                      },
-                      child: Text("POST", style: fontStyleBold)),
-                )
-              ],
-              backgroundColor: Colors.white,
-              title: Text("HOME",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      color: darkBlue,
-                      fontSize: 18)),
-              leading: IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: darkBlue,
-                  size: 28,
+                toolbarHeight: 70.0,
+                elevation: 0.0,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Container(),
+                actions: [
+                  SizedBox(
+                      width: 85,
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddScreen()));
+                          },
+                          child: Text("POST", style: fontStyleBold)))
+                ],
+                backgroundColor: Colors.white,
+                title: Text("HOME",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: darkBlue,
+                        fontSize: 18)),
+                leading: IconButton(
+                  icon: Icon(Icons.menu, color: darkBlue, size: 28),
+                  onPressed: () {},
                 ),
-                onPressed: () {},
-              ),
-              leadingWidth: 33,
-            ),
+                leadingWidth: 33),
             Container(
               height: 55,
               width: double.infinity,

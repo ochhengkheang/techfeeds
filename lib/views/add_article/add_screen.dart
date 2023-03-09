@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dropdownfield2/dropdownfield2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,6 +30,10 @@ class _AddScreenState extends State<AddScreen> {
   var imageFile;
   var status;
   var slug;
+  var thumbnailId;
+
+  var radioValue;
+  var choice;
   var titleController = TextEditingController();
   var contentController = TextEditingController();
   @override
@@ -43,10 +48,20 @@ class _AddScreenState extends State<AddScreen> {
   var lightGreen = Color.fromRGBO(79, 192, 159, 1);
   var darkBlue = Color.fromRGBO(18, 17, 56, 1);
 
+  //not dynamic yet
+  var categoryId;
+  List<String> categoryName = ["12", "24"];
+
+  var tagId;
+  List<String> tagName = ["12", "24"];
+
   @override
   void initState() {
     //customize post UI g
     super.initState();
+    setState(() {
+      radioValue = "true";
+    });
     if (widget.isUpdate) {
       titleController.text = widget.article!.title!;
       slug = widget.article!.slug!;
@@ -112,75 +127,202 @@ class _AddScreenState extends State<AddScreen> {
             ],
           ),
         ),
-        body: Container(
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 3,
-                    color: darkBlue,
-                  ),
-                  ChangeNotifierProvider<ArticleViewModel>(
-                    create: (BuildContext ctx) => articleViewModel,
-                    child: Consumer(builder: (ctx, image, _) {
-                      //get product response status
-                      if (articleViewModel.articleResponse.status ==
-                          Status.COMPLETED) {
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Post Article Success')));
-                        });
-                      }
-
-                      /*double notify listener because they are called in the same notifer in the view model
-                      consider create diffrent repo (homeviewmodel and imageview model) and call different notifier
-                    */
-                      // print('image url ${homeViewModel.imageResponse.data!.url}');
-                      return Center(
-                        child: imageFile == null
-                            ? Image.network(
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
-                                width: 150,
-                                height: 150)
-                            : Image.file(imageFile,
-                                fit: BoxFit.cover, width: 150, height: 150),
-                      );
-                    }),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 3,
-                    color: darkBlue,
-                  ),
-                  spacing(),
-                  articleTextField(
-                      darkBlue: darkBlue,
-                      lightGreen: lightGreen,
-                      controller: titleController,
-                      title: "Title",
-                      maxLine: 1),
-                  spacing(),
-                  articleTextField(
-                      darkBlue: darkBlue,
-                      lightGreen: lightGreen,
-                      controller: contentController,
-                      title: "Content",
-                      maxLine: 6),
-                  spacing(),
-                ],
-              ),
-            )),
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 3,
+                  color: darkBlue,
+                ),
+                ChangeNotifierProvider<ArticleViewModel>(
+                  create: (BuildContext ctx) => articleViewModel,
+                  child: Consumer(builder: (ctx, image, _) {
+                    //get Article response status
+                    if (articleViewModel.articleResponse.status ==
+                        Status.COMPLETED) {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Post Article Success')));
+                      });
+                    }
+                    print(
+                        'image url ${imageViewModel.imageResponse.data?.url}');
+                    return Center(
+                      child: imageFile == null
+                          ? Image.network(
+                              'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
+                              width: 150,
+                              height: 150)
+                          : Image.file(imageFile,
+                              fit: BoxFit.cover, width: 150, height: 150),
+                    );
+                  }),
+                ),
+                ChangeNotifierProvider<ImageViewModel>(
+                  create: (BuildContext ctx) => imageViewModel,
+                  child: Consumer(builder: (ctx, image, _) {
+                    //get Article response status
+                    if (imageViewModel.imageResponse.status ==
+                        Status.COMPLETED) {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Image Upload Success')));
+                      });
+                    }
+                    return Center(
+                      child: SizedBox(),
+                    );
+                  }),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 3,
+                  color: darkBlue,
+                ),
+                spacing(10.0),
+                articleTextField(
+                    darkBlue: darkBlue,
+                    lightGreen: lightGreen,
+                    controller: titleController,
+                    title: "Title",
+                    maxLine: 1),
+                spacing(10.0),
+                articleTextField(
+                    darkBlue: darkBlue,
+                    lightGreen: lightGreen,
+                    controller: contentController,
+                    title: "Content",
+                    maxLine: 10),
+                spacing(10.0),
+                statusRadio(context),
+                spacing(20.0),
+                //make change in the package code to make formTextField uneditable
+                DropDownField(
+                    labelStyle: fontStyleSemiBold,
+                    hintStyle: fontStyleSemiBold,
+                    strict: true,
+                    textStyle: fontStyleSemiBold,
+                    icon: Icon(Icons.category, color: lightGreen),
+                    setter: (dynamic newValue) {
+                      categoryId = newValue;
+                    },
+                    value: categoryId,
+                    required: true,
+                    hintText: 'Choose A Category',
+                    labelText: 'Category',
+                    items: categoryName),
+                spacing(20.0),
+                DropDownField(
+                    labelStyle: fontStyleSemiBold,
+                    hintStyle: fontStyleSemiBold,
+                    strict: true,
+                    textStyle: fontStyleSemiBold,
+                    icon: Icon(Icons.category, color: lightGreen),
+                    setter: (dynamic newValue) {
+                      categoryId = newValue;
+                    },
+                    value: categoryId,
+                    required: true,
+                    hintText: 'Choose a Tag',
+                    labelText: 'Tag',
+                    items: tagName),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+            child: TextButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(lightGreen),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)))),
+                onPressed: () {},
+                child: Text(
+                  "Submit",
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 24),
+                ))),
       ),
     );
   }
 
-  SizedBox spacing() {
+  //can't extract to another class since it is statful widget and return value status
+  Row statusRadio(BuildContext context) {
+    return Row(
+      children: [
+        Text("STATUS:",
+            style: TextStyle(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontSize: 15,
+                fontWeight: FontWeight.w600)),
+        Padding(padding: EdgeInsets.only(left: 5)),
+        Spacer(),
+        Container(
+          decoration: BoxDecoration(
+              color: darkBlue, borderRadius: BorderRadius.circular(20)),
+          height: 40,
+          width: MediaQuery.of(context).size.width - 150,
+          child: Theme(
+            data:
+                Theme.of(context).copyWith(unselectedWidgetColor: Colors.white),
+            child: Row(children: [
+              Spacer(),
+              Radio(
+                activeColor: lightGreen,
+                value: 'true',
+                groupValue: radioValue,
+                onChanged: (value) {
+                  radioButtonChanges(value);
+                },
+              ),
+              Text("True", style: TextStyle(color: Colors.white)),
+              Padding(padding: EdgeInsets.only(left: 50)),
+              Radio(
+                activeColor: lightGreen,
+                value: 'false',
+                groupValue: radioValue,
+                onChanged: (value) {
+                  radioButtonChanges(value);
+                },
+              ),
+              Text("Flase", style: TextStyle(color: Colors.white)),
+              Spacer()
+            ]),
+          ),
+        ),
+        Spacer(),
+      ],
+    );
+  }
+
+  void radioButtonChanges(var value) {
+    setState(() {
+      radioValue = value;
+      switch (value) {
+        case 'true':
+          status = value;
+          break;
+        case 'false':
+          status = value;
+          break;
+        default:
+          status = null;
+      }
+      debugPrint("Status: $status"); //Debug the choice in console
+    });
+  }
+
+  SizedBox spacing(var height) {
     return SizedBox(
-      height: 10,
+      height: height,
     );
   }
 }
