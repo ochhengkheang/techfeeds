@@ -11,7 +11,7 @@ class ArticleRepository {
 
   Future<ArticleModel> getArticle(page, limit) async {
     try {
-      //doublue populate to fetch both thumbnail and category data and attribute
+      //double populate to fetch both thumbnail and category data and attribute
       //if the url populate only 1, even if the model is right and the code to fetch it is right, the data will show null. Therefore, you need to include category in the url to fetch it
       var url =
           '${AppUrl.getArticle}?pagination%5Bpage%5D=$page&pagination%5BpageSize%5D=$limit&populate=thumbnail&populate=category';
@@ -28,7 +28,20 @@ class ArticleRepository {
       var data = ArticleRequest(data: dataRequest);
       var article = ArticleRequest(data: dataRequest);
       var response =
-          await _apiService.postApi(AppUrl.getArticle, article.toJson());
+          await _apiService.postApi(AppUrl.postArticle, article.toJson());
+      return response = ArticleResponse.fromJson(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future putArticle(dataRequest, id) async {
+    //add parameter id to receive id to put post api url end point
+    try {
+      var data = ArticleRequest(data: dataRequest);
+      var article = ArticleRequest(data: dataRequest);
+      var response = await _apiService.postApi(
+          '${AppUrl.postArticle}/$id', article.toJson());
       return response = ArticleResponse.fromJson(response);
     } catch (e) {
       rethrow;

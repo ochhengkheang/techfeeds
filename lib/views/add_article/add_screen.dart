@@ -4,9 +4,11 @@ import 'package:dropdownfield2/dropdownfield2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/models/article.dart';
+import 'package:techfeeds/models/article_request.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
 import 'package:techfeeds/view_models/image_view_model.dart';
 import 'package:techfeeds/views/add_article/widget/article_textfield.dart';
@@ -28,7 +30,7 @@ class _AddScreenState extends State<AddScreen> {
   var articleViewModel = ArticleViewModel();
   var imageViewModel = ImageViewModel();
   var imageFile;
-  var status;
+  bool status = true;
   var slug;
   var thumbnailId;
 
@@ -38,22 +40,26 @@ class _AddScreenState extends State<AddScreen> {
   var contentController = TextEditingController();
   @override
   var fontStyleBold = GoogleFonts.poppins(
-      fontWeight: FontWeight.bold,
-      color: Color.fromRGBO(18, 17, 56, 1),
-      fontSize: 24);
+      fontWeight: FontWeight.bold, color: Colors.white, fontSize: 24);
+
   var fontStyleSemiBold = GoogleFonts.poppins(
       fontWeight: FontWeight.w500,
       color: Color.fromRGBO(18, 17, 56, 1),
       fontSize: 12);
+
   var lightGreen = Color.fromRGBO(79, 192, 159, 1);
   var darkBlue = Color.fromRGBO(18, 17, 56, 1);
 
   //not dynamic yet
   var categoryId;
-  List<String> categoryName = ["12", "24"];
+  List<String> categoryName = [
+    "1. Web Design",
+    "3. Back-End",
+    "4. Mobile Development"
+  ];
 
   var tagId;
-  List<String> tagName = ["12", "24"];
+  List<String> tagName = ["1. HTML", "2. CSS", "3. JavaScript"];
 
   @override
   void initState() {
@@ -100,7 +106,10 @@ class _AddScreenState extends State<AddScreen> {
             elevation: 0,
             title: Text(
               "Create",
-              style: fontStyleBold,
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(18, 17, 56, 1),
+                  fontSize: 24),
             ),
             leading: IconButton(
                 onPressed: () {
@@ -149,6 +158,13 @@ class _AddScreenState extends State<AddScreen> {
                             SnackBar(content: Text('Post Article Success')));
                       });
                     }
+                    if (imageViewModel.imageResponse.status ==
+                        Status.COMPLETED) {
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Image Upload Success')));
+                      });
+                    }
                     print(
                         'image url ${imageViewModel.imageResponse.data?.url}');
                     return Center(
@@ -159,22 +175,6 @@ class _AddScreenState extends State<AddScreen> {
                               height: 150)
                           : Image.file(imageFile,
                               fit: BoxFit.cover, width: 150, height: 150),
-                    );
-                  }),
-                ),
-                ChangeNotifierProvider<ImageViewModel>(
-                  create: (BuildContext ctx) => imageViewModel,
-                  child: Consumer(builder: (ctx, image, _) {
-                    //get Article response status
-                    if (imageViewModel.imageResponse.status ==
-                        Status.COMPLETED) {
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Image Upload Success')));
-                      });
-                    }
-                    return Center(
-                      child: SizedBox(),
                     );
                   }),
                 ),
@@ -200,15 +200,16 @@ class _AddScreenState extends State<AddScreen> {
                 spacing(10.0),
                 statusRadio(context),
                 spacing(20.0),
-                //make change in the package code to make formTextField uneditable
+                //make change in the package DropDownField code to make formTextField uneditable
                 DropDownField(
                     labelStyle: fontStyleSemiBold,
                     hintStyle: fontStyleSemiBold,
                     strict: true,
                     textStyle: fontStyleSemiBold,
                     icon: Icon(Icons.category, color: lightGreen),
-                    setter: (dynamic newValue) {
+                    onValueChanged: (dynamic newValue) {
                       categoryId = newValue;
+                      print(categoryId);
                     },
                     value: categoryId,
                     required: true,
@@ -221,11 +222,12 @@ class _AddScreenState extends State<AddScreen> {
                     hintStyle: fontStyleSemiBold,
                     strict: true,
                     textStyle: fontStyleSemiBold,
-                    icon: Icon(Icons.category, color: lightGreen),
-                    setter: (dynamic newValue) {
-                      categoryId = newValue;
+                    icon: Icon(Icons.tag, color: lightGreen),
+                    onValueChanged: (dynamic newValue) {
+                      tagId = getId(newValue);
+                      print(tagId);
                     },
-                    value: categoryId,
+                    value: tagId,
                     required: true,
                     hintText: 'Choose a Tag',
                     labelText: 'Tag',
@@ -242,14 +244,35 @@ class _AddScreenState extends State<AddScreen> {
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)))),
-                onPressed: () {},
-                child: Text(
-                  "Submit",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 24),
-                ))),
+                onPressed: () {
+                  var thumbnaiId =
+                      imageViewModel.imageResponse.data!.id; //getthumbnailid
+                  var dataRequest = DataRequest(
+                      title: titleController.text,
+                      slug: getSlug(titleController.text),
+                      status: status,
+                      content: contentController.text,
+                      thumbnail: thumbnaiId.toString(),
+                      category: getId(categoryId),
+                      tags: getTagList(
+                          tagId)); //didn't use dropbox checklist to get many value and add all to list, so convert a string to list string
+                  // print(
+                  //     "Data Request: Title:${dataRequest.title}, Slug:${dataRequest.slug}, Status:${dataRequest.status}, Content:${dataRequest.content}, ThumbnailId:${dataRequest.thumbnail}, Category:${dataRequest.category}, Tags:${dataRequest.tags}");
+                  if (widget.isUpdate) {
+                    // check for post or put
+                    //articleViewModel.postArticle(dataRequest, widget.id);
+                  } else
+                    articleViewModel.postArticle(dataRequest);
+                },
+                child: widget.isUpdate
+                    ? Text(
+                        "Update",
+                        style: fontStyleBold,
+                      )
+                    : Text(
+                        "Submit",
+                        style: fontStyleBold,
+                      ))),
       ),
     );
   }
@@ -308,16 +331,37 @@ class _AddScreenState extends State<AddScreen> {
       radioValue = value;
       switch (value) {
         case 'true':
-          status = value;
+          status = true;
           break;
         case 'false':
-          status = value;
+          status = false;
           break;
         default:
-          status = null;
+          status = true;
       }
       debugPrint("Status: $status"); //Debug the choice in console
     });
+  }
+
+  String getSlug(var titleController) {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMddhhmmss');
+    final String formatted = formatter.format(now);
+
+    slug = "${titleController}-${formatted}";
+    print("Slug: $slug");
+    return slug;
+  }
+
+  String getId(var categoryName) {
+    final endIndex = categoryName.indexOf(".", 0);
+    return categoryName.substring(0, endIndex);
+  }
+
+  List<String> getTagList(var tagId) {
+    List<String> stringList = tagId.split(".");
+    print(stringList);
+    return stringList;
   }
 
   SizedBox spacing(var height) {
