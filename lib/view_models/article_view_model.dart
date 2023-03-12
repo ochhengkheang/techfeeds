@@ -38,4 +38,13 @@ class ArticleViewModel extends ChangeNotifier {
             {setArrticleResponse(ApiResponse.error(error.toString()))});
     print('Post success');
   }
+
+  Future putArticle(dataRequest, id) async {
+    await _articleRepository
+        .putArticle(dataRequest, id)
+        .then((value) => {setArrticleResponse(ApiResponse.complete(value))})
+        .onError((error, stackTrace) =>
+            {setArrticleResponse(ApiResponse.error(error.toString()))});
+    print('Put success');
+  }
 }

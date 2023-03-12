@@ -25,7 +25,6 @@ class ArticleRepository {
 
   Future postArticle(dataRequest) async {
     try {
-      var data = ArticleRequest(data: dataRequest);
       var article = ArticleRequest(data: dataRequest);
       var response =
           await _apiService.postApi(AppUrl.postArticle, article.toJson());
@@ -39,9 +38,8 @@ class ArticleRepository {
     //add parameter id to receive id to put post api url end point
     //slug have pattern do not include special symbol, convert to remove all pattern
     try {
-      var data = ArticleRequest(data: dataRequest);
       var article = ArticleRequest(data: dataRequest);
-      var response = await _apiService.postApi(
+      var response = await _apiService.putApi(
           '${AppUrl.postArticle}/$id', article.toJson());
       return response = ArticleResponse.fromJson(response);
     } catch (e) {

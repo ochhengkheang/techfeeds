@@ -44,6 +44,7 @@ class _AddScreenState extends State<AddScreen> {
   var slug;
   var thumbnailId = null;
 
+  bool isUploaded = false;
   var radioValue;
   var choice;
   var titleController = TextEditingController();
@@ -109,9 +110,9 @@ class _AddScreenState extends State<AddScreen> {
       imageFile = File(pickedFile.path);
       setState(() {
         widget.haveImage = true;
+        isUploaded = true;
       });
       imageViewModel.uploadImage(pickedFile.path);
-
       print("Picked File path: ${pickedFile.path}");
     } else
       print('image not picked');
@@ -282,9 +283,11 @@ class _AddScreenState extends State<AddScreen> {
                             borderRadius: BorderRadius.circular(10)))),
                 onPressed: () {
                   print(widget.haveImage);
+
                   if (widget.haveImage) {
                     if (formKey.currentState!.validate()) {
-                      thumbnailId = imageViewModel.imageResponse.data!.id;
+                      if (isUploaded)
+                        thumbnailId = imageViewModel.imageResponse.data!.id;
                       var dataRequest = DataRequest(
                           title: titleController.text,
                           slug: getSlug(titleController.text),
@@ -298,14 +301,14 @@ class _AddScreenState extends State<AddScreen> {
                       //     "Data Request: Title:${dataRequest.title}, Slug:${dataRequest.slug}, Status:${dataRequest.status}, Content:${dataRequest.content}, ThumbnailId:${dataRequest.thumbnail}, Category:${dataRequest.category}, Tags:${dataRequest.tags}");
                       if (widget.isUpdate) {
                         // check for post or put
-                        //articleViewModel.putArticle(dataRequest, widget.id);
+                        articleViewModel.putArticle(dataRequest, widget.id);
                         print(dataRequest.thumbnail);
-                        articleViewModel.postArticle(dataRequest);
-                      } else if (widget.haveImage)
+                      } else
                         articleViewModel.postArticle(dataRequest);
                     }
-                  } else
+                  } else {
                     _getImageFromGalleryOrCamera('camera');
+                  }
                   //do validate post
                 },
                 child: widget.haveImage
@@ -315,18 +318,13 @@ class _AddScreenState extends State<AddScreen> {
                             style: fontStyleBold,
                           )
                         : Text(
-                            "Select Image",
-                            style: fontStyleBold,
-                          )
-                    : widget.haveImage
-                        ? Text(
                             "Submit",
                             style: fontStyleBold,
                           )
-                        : Text(
-                            "Select Image",
-                            style: fontStyleBold,
-                          ))),
+                    : Text(
+                        "Select Image",
+                        style: fontStyleBold,
+                      ))),
       ),
     );
   }

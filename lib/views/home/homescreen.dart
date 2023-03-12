@@ -63,9 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AddScreen(
-                                          haveImage: false,
-                                        )));
+                                    builder: (context) =>
+                                        AddScreen(haveImage: false)));
                           },
                           child: Text("POST", style: fontStyleBold)))
                 ],

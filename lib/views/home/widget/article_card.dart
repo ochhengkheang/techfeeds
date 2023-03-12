@@ -60,9 +60,11 @@ class ArticleCard extends StatelessWidget {
                         haveImage = false;
                         imageUrl =
                             'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png';
-                      } else
+                      } else {
+                        haveImage = true;
                         imageUrl =
                             'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}';
+                      }
 
                       Navigator.push(
                           context,
