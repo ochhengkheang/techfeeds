@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:math';
 import 'package:dropdownfield2/dropdownfield2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,12 +15,20 @@ import 'package:techfeeds/views/add_article/widget/article_textfield.dart';
 import 'package:techfeeds/views/home/homescreen.dart';
 
 class AddScreen extends StatefulWidget {
-  AddScreen({Key? key, this.article, this.isUpdate = false, this.id})
+  AddScreen(
+      {Key? key,
+      this.article,
+      this.isUpdate = false,
+      this.id,
+      this.imageUrl,
+      this.haveImage})
       : super(key: key);
 
   Attributes? article;
   var isUpdate;
   var id;
+  var imageUrl;
+  var haveImage;
 
   @override
   State<AddScreen> createState() => _AddScreenState();
@@ -34,7 +42,7 @@ class _AddScreenState extends State<AddScreen> {
   var imageFile;
   bool status = true;
   var slug;
-  var thumbnailId;
+  var thumbnailId = null;
 
   var radioValue;
   var choice;
@@ -60,6 +68,7 @@ class _AddScreenState extends State<AddScreen> {
     "4. Mobile Development"
   ];
 
+  //not dynamic yet
   var tagId;
   List<String> tagName = ["1. HTML", "2. CSS", "3. JavaScript"];
 
@@ -75,6 +84,18 @@ class _AddScreenState extends State<AddScreen> {
       slug = widget.article!.slug!;
       contentController.text = widget.article!.content!;
       status = widget.article!.status!;
+      //make change  to radius status to update if false or true
+      radioValue = "$status";
+      if (widget.article!.thumbnail!.data == null)
+        widget.haveImage = false;
+      else
+        thumbnailId = widget.article!.thumbnail!.data!.id!;
+
+      print(widget.id);
+      print(slug);
+      print(thumbnailId);
+      print(widget.imageUrl);
+      print(radioValue);
     }
   }
 
@@ -86,8 +107,11 @@ class _AddScreenState extends State<AddScreen> {
         maxHeight: 1800);
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
-      setState(() {});
+      setState(() {
+        widget.haveImage = true;
+      });
       imageViewModel.uploadImage(pickedFile.path);
+
       print("Picked File path: ${pickedFile.path}");
     } else
       print('image not picked');
@@ -175,10 +199,15 @@ class _AddScreenState extends State<AddScreen> {
                           'image url ${imageViewModel.imageResponse.data?.url}');
                       return Center(
                         child: imageFile == null
-                            ? Image.network(
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
-                                width: 150,
-                                height: 150)
+                            ? widget.isUpdate
+                                ? Image.network(widget.imageUrl,
+                                    width: 150,
+                                    height:
+                                        150) //when updated, show image url, if not show notfound image
+                                : Image.network(
+                                    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
+                                    width: 150,
+                                    height: 150)
                             : Image.file(imageFile,
                                 fit: BoxFit.cover, width: 150, height: 150),
                       );
@@ -252,37 +281,52 @@ class _AddScreenState extends State<AddScreen> {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)))),
                 onPressed: () {
+                  print(widget.haveImage);
+                  if (widget.haveImage) {
+                    if (formKey.currentState!.validate()) {
+                      thumbnailId = imageViewModel.imageResponse.data!.id;
+                      var dataRequest = DataRequest(
+                          title: titleController.text,
+                          slug: getSlug(titleController.text),
+                          status: status,
+                          content: contentController.text,
+                          thumbnail: thumbnailId.toString(),
+                          category: getId(categoryId),
+                          tags: getTagList(
+                              tagId)); //didn't use dropbox checklist to get many value and add all to list, so convert a string to list string
+                      // print(
+                      //     "Data Request: Title:${dataRequest.title}, Slug:${dataRequest.slug}, Status:${dataRequest.status}, Content:${dataRequest.content}, ThumbnailId:${dataRequest.thumbnail}, Category:${dataRequest.category}, Tags:${dataRequest.tags}");
+                      if (widget.isUpdate) {
+                        // check for post or put
+                        //articleViewModel.putArticle(dataRequest, widget.id);
+                        print(dataRequest.thumbnail);
+                        articleViewModel.postArticle(dataRequest);
+                      } else if (widget.haveImage)
+                        articleViewModel.postArticle(dataRequest);
+                    }
+                  } else
+                    _getImageFromGalleryOrCamera('camera');
                   //do validate post
-                  if (formKey.currentState!.validate()) {
-                    var thumbnaiId =
-                        imageViewModel.imageResponse.data!.id; //getthumbnailid
-                    var dataRequest = DataRequest(
-                        title: titleController.text,
-                        slug: getSlug(titleController.text),
-                        status: status,
-                        content: contentController.text,
-                        thumbnail: thumbnaiId.toString(),
-                        category: getId(categoryId),
-                        tags: getTagList(
-                            tagId)); //didn't use dropbox checklist to get many value and add all to list, so convert a string to list string
-                    // print(
-                    //     "Data Request: Title:${dataRequest.title}, Slug:${dataRequest.slug}, Status:${dataRequest.status}, Content:${dataRequest.content}, ThumbnailId:${dataRequest.thumbnail}, Category:${dataRequest.category}, Tags:${dataRequest.tags}");
-                    if (widget.isUpdate) {
-                      // check for post or put
-                      //articleViewModel.postArticle(dataRequest, widget.id);
-                    } else
-                      articleViewModel.postArticle(dataRequest);
-                  }
                 },
-                child: widget.isUpdate
-                    ? Text(
-                        "Update",
-                        style: fontStyleBold,
-                      )
-                    : Text(
-                        "Submit",
-                        style: fontStyleBold,
-                      ))),
+                child: widget.haveImage
+                    ? widget.isUpdate
+                        ? Text(
+                            "Update",
+                            style: fontStyleBold,
+                          )
+                        : Text(
+                            "Select Image",
+                            style: fontStyleBold,
+                          )
+                    : widget.haveImage
+                        ? Text(
+                            "Submit",
+                            style: fontStyleBold,
+                          )
+                        : Text(
+                            "Select Image",
+                            style: fontStyleBold,
+                          ))),
       ),
     );
   }
@@ -361,7 +405,9 @@ class _AddScreenState extends State<AddScreen> {
     String temp = titleController;
     String replaceSpace = temp.replaceAll(' ', '-');
     final replaceSpecial = replaceSpace.replaceAll(RegExp('[^A-Za-z0-9-]'), '');
-    String converted = "${replaceSpecial}-${formatted}"; //here
+
+    int random = Random().nextInt(1000);
+    String converted = "$replaceSpecial-$formatted$random"; //here
     print("Slug: $converted");
     return converted;
   }

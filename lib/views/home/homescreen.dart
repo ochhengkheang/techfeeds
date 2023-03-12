@@ -63,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AddScreen()));
+                                    builder: (context) => AddScreen(
+                                          haveImage: false,
+                                        )));
                           },
                           child: Text("POST", style: fontStyleBold)))
                 ],
@@ -125,7 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else {
                       var article =
                           articles.apiResponse.data!.data![index].attributes;
+                      var id = articles.apiResponse.data!.data![index].id;
                       return ArticleCard(
+                          id: id,
                           article: article,
                           lightGreen: lightGreen,
                           fontStyleSemiBold: fontStyleSemiBold,

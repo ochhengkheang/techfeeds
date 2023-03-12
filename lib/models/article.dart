@@ -1,4 +1,3 @@
-//add extra name c and t on data and attributes to avoid converting errors, then rename them later
 class ArticleModel {
   List<Data>? data;
   Meta? meta;
@@ -60,6 +59,7 @@ class Attributes {
   String? publishedAt;
   Thumbnail? thumbnail;
   Category? category;
+  Tags? tags;
 
   Attributes(
       {this.title,
@@ -70,7 +70,8 @@ class Attributes {
       this.updatedAt,
       this.publishedAt,
       this.thumbnail,
-      this.category});
+      this.category,
+      this.tags});
 
   Attributes.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -86,6 +87,7 @@ class Attributes {
     category = json['category'] != null
         ? new Category.fromJson(json['category'])
         : null;
+    tags = json['tags'] != null ? new Tags.fromJson(json['tags']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -102,6 +104,9 @@ class Attributes {
     }
     if (this.category != null) {
       data['category'] = this.category!.toJson();
+    }
+    if (this.tags != null) {
+      data['tags'] = this.tags!.toJson();
     }
     return data;
   }
@@ -213,6 +218,68 @@ class CategoryAttributes {
   CategoryAttributes({this.title});
 
   CategoryAttributes.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    return data;
+  }
+}
+
+class Tags {
+  List<TagData>? data;
+
+  Tags({this.data});
+
+  Tags.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = <TagData>[];
+      json['data'].forEach((v) {
+        data!.add(new TagData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class TagData {
+  int? id;
+  TagAttributes? attributes;
+
+  TagData({this.id, this.attributes});
+
+  TagData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    attributes = json['attributes'] != null
+        ? new TagAttributes.fromJson(json['attributes'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    if (this.attributes != null) {
+      data['attributes'] = this.attributes!.toJson();
+    }
+    return data;
+  }
+}
+
+class TagAttributes {
+  String? title;
+
+  TagAttributes({this.title});
+
+  TagAttributes.fromJson(Map<String, dynamic> json) {
     title = json['title'];
   }
 

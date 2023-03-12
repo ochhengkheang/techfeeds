@@ -25,6 +25,16 @@
                             "title": "Web Design"
                         }
                     }
+                },
+                "tags": {
+                    "tagdata": [
+                        {
+                            "id": 1,
+                            "tagattributes": {
+                                "title": "HTML"
+                            }
+                        }
+                    ]
                 }
             }
         }
