@@ -37,6 +37,7 @@ class ArticleRepository {
 
   Future putArticle(dataRequest, id) async {
     //add parameter id to receive id to put post api url end point
+    //slug have pattern do not include special symbol, convert to remove all pattern
     try {
       var data = ArticleRequest(data: dataRequest);
       var article = ArticleRequest(data: dataRequest);

@@ -27,6 +27,8 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  final formKey = GlobalKey<FormState>();
+
   var articleViewModel = ArticleViewModel();
   var imageViewModel = ImageViewModel();
   var imageFile;
@@ -140,99 +142,104 @@ class _AddScreenState extends State<AddScreen> {
           scrollDirection: Axis.vertical,
           child: Container(
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 3,
-                  color: darkBlue,
-                ),
-                ChangeNotifierProvider<ArticleViewModel>(
-                  create: (BuildContext ctx) => articleViewModel,
-                  child: Consumer(builder: (ctx, image, _) {
-                    //get Article response status
-                    if (articleViewModel.articleResponse.status ==
-                        Status.COMPLETED) {
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Post Article Success')));
-                      });
-                    }
-                    if (imageViewModel.imageResponse.status ==
-                        Status.COMPLETED) {
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Image Upload Success')));
-                      });
-                    }
-                    print(
-                        'image url ${imageViewModel.imageResponse.data?.url}');
-                    return Center(
-                      child: imageFile == null
-                          ? Image.network(
-                              'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
-                              width: 150,
-                              height: 150)
-                          : Image.file(imageFile,
-                              fit: BoxFit.cover, width: 150, height: 150),
-                    );
-                  }),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 3,
-                  color: darkBlue,
-                ),
-                spacing(10.0),
-                articleTextField(
-                    darkBlue: darkBlue,
-                    lightGreen: lightGreen,
-                    controller: titleController,
-                    title: "Title",
-                    maxLine: 1),
-                spacing(10.0),
-                articleTextField(
-                    darkBlue: darkBlue,
-                    lightGreen: lightGreen,
-                    controller: contentController,
-                    title: "Content",
-                    maxLine: 10),
-                spacing(10.0),
-                statusRadio(context),
-                spacing(20.0),
-                //make change in the package DropDownField code to make formTextField uneditable
-                DropDownField(
-                    labelStyle: fontStyleSemiBold,
-                    hintStyle: fontStyleSemiBold,
-                    strict: true,
-                    textStyle: fontStyleSemiBold,
-                    icon: Icon(Icons.category, color: lightGreen),
-                    onValueChanged: (dynamic newValue) {
-                      categoryId = newValue;
-                      print(categoryId);
-                    },
-                    value: categoryId,
-                    required: true,
-                    hintText: 'Choose A Category',
-                    labelText: 'Category',
-                    items: categoryName),
-                spacing(20.0),
-                DropDownField(
-                    labelStyle: fontStyleSemiBold,
-                    hintStyle: fontStyleSemiBold,
-                    strict: true,
-                    textStyle: fontStyleSemiBold,
-                    icon: Icon(Icons.tag, color: lightGreen),
-                    onValueChanged: (dynamic newValue) {
-                      tagId = getId(newValue);
-                      print(tagId);
-                    },
-                    value: tagId,
-                    required: true,
-                    hintText: 'Choose a Tag',
-                    labelText: 'Tag',
-                    items: tagName),
-              ],
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 3,
+                    color: darkBlue,
+                  ),
+                  ChangeNotifierProvider<ArticleViewModel>(
+                    create: (BuildContext ctx) => articleViewModel,
+                    child: Consumer(builder: (ctx, image, _) {
+                      //get Article response status
+                      if (articleViewModel.articleResponse.status ==
+                          Status.COMPLETED) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Post Article Success')));
+                        });
+                      }
+                      if (imageViewModel.imageResponse.status ==
+                          Status.COMPLETED) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Image Upload Success')));
+                        });
+                      }
+                      print(
+                          'image url ${imageViewModel.imageResponse.data?.url}');
+                      return Center(
+                        child: imageFile == null
+                            ? Image.network(
+                                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
+                                width: 150,
+                                height: 150)
+                            : Image.file(imageFile,
+                                fit: BoxFit.cover, width: 150, height: 150),
+                      );
+                    }),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 3,
+                    color: darkBlue,
+                  ),
+                  spacing(10.0),
+                  ArticleFormField(
+                      darkBlue: darkBlue,
+                      lightGreen: lightGreen,
+                      title: "Title",
+                      controller: titleController,
+                      maxLine: 1),
+                  spacing(10.0),
+                  ArticleFormField(
+                      darkBlue: darkBlue,
+                      lightGreen: lightGreen,
+                      title: "Content",
+                      controller: contentController,
+                      maxLine: 10),
+                  spacing(10.0),
+                  statusRadio(context),
+                  spacing(20.0),
+                  //make change in the package DropDownField code to make formTextField uneditable
+                  DropDownField(
+                      labelStyle: fontStyleSemiBold,
+                      hintStyle: fontStyleSemiBold,
+                      strict: true,
+                      textStyle: fontStyleSemiBold,
+                      icon: Icon(Icons.category, color: lightGreen),
+                      onValueChanged: (dynamic newValue) {
+                        categoryId = newValue;
+                        print(categoryId);
+                      },
+                      value: categoryId,
+                      required: true,
+                      hintText: 'Choose A Category',
+                      labelText: 'Category',
+                      items: categoryName),
+                  spacing(20.0),
+                  DropDownField(
+                      labelStyle: fontStyleSemiBold,
+                      hintStyle: fontStyleSemiBold,
+                      strict: true,
+                      textStyle: fontStyleSemiBold,
+                      icon: Icon(Icons.tag, color: lightGreen),
+                      onValueChanged: (dynamic newValue) {
+                        tagId = getId(newValue);
+                        print(tagId);
+                      },
+                      value: tagId,
+                      required: true,
+                      hintText: 'Choose a Tag',
+                      labelText: 'Tag',
+                      items: tagName),
+                ],
+              ),
             ),
           ),
         ),
@@ -245,24 +252,27 @@ class _AddScreenState extends State<AddScreen> {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)))),
                 onPressed: () {
-                  var thumbnaiId =
-                      imageViewModel.imageResponse.data!.id; //getthumbnailid
-                  var dataRequest = DataRequest(
-                      title: titleController.text,
-                      slug: getSlug(titleController.text),
-                      status: status,
-                      content: contentController.text,
-                      thumbnail: thumbnaiId.toString(),
-                      category: getId(categoryId),
-                      tags: getTagList(
-                          tagId)); //didn't use dropbox checklist to get many value and add all to list, so convert a string to list string
-                  // print(
-                  //     "Data Request: Title:${dataRequest.title}, Slug:${dataRequest.slug}, Status:${dataRequest.status}, Content:${dataRequest.content}, ThumbnailId:${dataRequest.thumbnail}, Category:${dataRequest.category}, Tags:${dataRequest.tags}");
-                  if (widget.isUpdate) {
-                    // check for post or put
-                    //articleViewModel.postArticle(dataRequest, widget.id);
-                  } else
-                    articleViewModel.postArticle(dataRequest);
+                  //do validate post
+                  if (formKey.currentState!.validate()) {
+                    var thumbnaiId =
+                        imageViewModel.imageResponse.data!.id; //getthumbnailid
+                    var dataRequest = DataRequest(
+                        title: titleController.text,
+                        slug: getSlug(titleController.text),
+                        status: status,
+                        content: contentController.text,
+                        thumbnail: thumbnaiId.toString(),
+                        category: getId(categoryId),
+                        tags: getTagList(
+                            tagId)); //didn't use dropbox checklist to get many value and add all to list, so convert a string to list string
+                    // print(
+                    //     "Data Request: Title:${dataRequest.title}, Slug:${dataRequest.slug}, Status:${dataRequest.status}, Content:${dataRequest.content}, ThumbnailId:${dataRequest.thumbnail}, Category:${dataRequest.category}, Tags:${dataRequest.tags}");
+                    if (widget.isUpdate) {
+                      // check for post or put
+                      //articleViewModel.postArticle(dataRequest, widget.id);
+                    } else
+                      articleViewModel.postArticle(dataRequest);
+                  }
                 },
                 child: widget.isUpdate
                     ? Text(
@@ -347,10 +357,13 @@ class _AddScreenState extends State<AddScreen> {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyyMMddhhmmss');
     final String formatted = formatter.format(now);
-
-    slug = "${titleController}-${formatted}";
-    print("Slug: $slug");
-    return slug;
+    //fix error validation by removing special chars and replacing space with - when posting Slug
+    String temp = titleController;
+    String replaceSpace = temp.replaceAll(' ', '-');
+    final replaceSpecial = replaceSpace.replaceAll(RegExp('[^A-Za-z0-9-]'), '');
+    String converted = "${replaceSpecial}-${formatted}"; //here
+    print("Slug: $converted");
+    return converted;
   }
 
   String getId(var categoryName) {

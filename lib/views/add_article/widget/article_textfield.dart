@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class articleTextField extends StatelessWidget {
-  articleTextField({
+class ArticleFormField extends StatelessWidget {
+  ArticleFormField({
     Key? key,
     required this.darkBlue,
     required this.lightGreen,
-    required this.controller,
     required this.title,
+    required this.controller,
     required this.maxLine,
   }) : super(key: key);
 
   final Color darkBlue;
   final Color lightGreen;
-  var controller;
   var title;
+  var controller;
   var maxLine;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       style: TextStyle(color: Colors.white),
       maxLines: maxLine,
       controller: controller,
@@ -36,6 +36,7 @@ class articleTextField extends StatelessWidget {
             fontWeight: FontWeight.w600),
         labelText: title,
       ),
+      validator: (value) => value!.isEmpty ? "Cannot be empty" : null,
     );
   }
 }
