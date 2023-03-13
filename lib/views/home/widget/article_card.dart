@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:techfeeds/data/response/status.dart';
 import 'package:techfeeds/models/article.dart';
+import 'package:techfeeds/view_models/article_view_model.dart';
 import 'package:techfeeds/views/add_article/add_screen.dart';
+import 'package:techfeeds/views/home/homescreen.dart';
 
 class ArticleCard extends StatelessWidget {
   ArticleCard({
@@ -34,6 +39,7 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var articleViewModel = ArticleViewModel();
     return Padding(
       padding: EdgeInsets.fromLTRB(7, 0, 7, 0),
       child: Card(
@@ -134,7 +140,19 @@ class ArticleCard extends StatelessWidget {
                                               child: Text('Delete',
                                                   style: fontStyleButton),
                                               onPressed: () {
-                                                Navigator.of(context).pop();
+                                                articleViewModel
+                                                    .deleteArticle(id);
+                                                SchedulerBinding.instance
+                                                    .addPostFrameCallback(
+                                                        (timeStamp) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              HomeScreen()));
+                                                });
+
+                                                //Navigator.of(context).pop();
                                               }),
                                         )
                                       ])

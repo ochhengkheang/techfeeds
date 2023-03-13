@@ -59,16 +59,15 @@ class NetworkApiService {
     }
   }
 
-  Future deleteApi(url, object) async {
-    var headers = {'Content-Type': 'application/json'};
+  Future deleteApi(url) async {
     var request = http.Request('DELETE', Uri.parse(url));
-    request.body = json.encode(object);
-    request.headers.addAll(headers);
+    request.body = '''''';
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      var res = await response.stream.bytesToString();
+      return json.decode(res);
     } else {
       print(response.reasonPhrase);
     }

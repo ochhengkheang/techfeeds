@@ -91,12 +91,6 @@ class _AddScreenState extends State<AddScreen> {
         widget.haveImage = false;
       else
         thumbnailId = widget.article!.thumbnail!.data!.id!;
-
-      print(widget.id);
-      print(slug);
-      print(thumbnailId);
-      print(widget.imageUrl);
-      print(radioValue);
     }
   }
 

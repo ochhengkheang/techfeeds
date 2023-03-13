@@ -47,6 +47,18 @@ class ArticleRepository {
     }
   }
 
+  Future deleteArticle(id) async {
+    try {
+      print(id);
+      dynamic response =
+          await _apiService.deleteApi('${AppUrl.postArticle}/$id');
+      print('Delete Repo Response: $response');
+      return response = ArticleResponse.fromJson(response);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<ImageResponse> uploadImage(file) async {
     try {
       var response = await _apiService.uploadImage(AppUrl.uploadImage, file);
