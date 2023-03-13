@@ -132,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           article: article,
                           lightGreen: lightGreen,
                           fontStyleSemiBold: fontStyleSemiBold,
+                          fontStyleBold: fontStyleBold,
                           darkBlue: darkBlue);
                     }
                   },

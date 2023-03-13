@@ -196,6 +196,15 @@ class _AddScreenState extends State<AddScreen> {
                               SnackBar(content: Text('Image Upload Success')));
                         });
                       }
+                      if (articleViewModel.articleResponse.status ==
+                          Status.COMPLETED) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Put Success')));
+                        });
+                      }
+
                       print(
                           'image url ${imageViewModel.imageResponse.data?.url}');
                       return Center(

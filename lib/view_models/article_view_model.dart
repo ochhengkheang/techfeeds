@@ -9,13 +9,19 @@ class ArticleViewModel extends ChangeNotifier {
 
   ApiResponse<ArticleModel> apiResponse = ApiResponse.loading();
   ApiResponse<ArticleResponse> articleResponse = ApiResponse.loading();
+  ApiResponse<ArticleResponse> articlePutReponse = ApiResponse.loading();
 
   setArticleList(ApiResponse<ArticleModel> response) {
     apiResponse = response;
     notifyListeners();
   }
 
-  setArrticleResponse(ApiResponse<ArticleResponse> response) {
+  setArticleResponse(ApiResponse<ArticleResponse> response) {
+    articleResponse = response;
+    notifyListeners();
+  }
+
+  setPutResponse(ApiResponse<ArticleResponse> response) {
     articleResponse = response;
     notifyListeners();
   }
@@ -33,18 +39,18 @@ class ArticleViewModel extends ChangeNotifier {
   Future postArticle(dataRequest) async {
     await _articleRepository
         .postArticle(dataRequest)
-        .then((value) => {setArrticleResponse(ApiResponse.complete(value))})
+        .then((value) => {setArticleResponse(ApiResponse.complete(value))})
         .onError((error, stackTrace) =>
-            {setArrticleResponse(ApiResponse.error(error.toString()))});
+            {setArticleResponse(ApiResponse.error(error.toString()))});
     print('Post success');
   }
 
   Future putArticle(dataRequest, id) async {
     await _articleRepository
         .putArticle(dataRequest, id)
-        .then((value) => {setArrticleResponse(ApiResponse.complete(value))})
+        .then((value) => {setPutResponse(ApiResponse.complete(value))})
         .onError((error, stackTrace) =>
-            {setArrticleResponse(ApiResponse.error(error.toString()))});
+            {setPutResponse(ApiResponse.error(error.toString()))});
     print('Put success');
   }
 }

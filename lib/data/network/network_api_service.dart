@@ -59,6 +59,21 @@ class NetworkApiService {
     }
   }
 
+  Future deleteApi(url, object) async {
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request('DELETE', Uri.parse(url));
+    request.body = json.encode(object);
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   Future uploadImage(url, file) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('files', file));

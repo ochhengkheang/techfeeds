@@ -10,6 +10,7 @@ class ArticleCard extends StatelessWidget {
     required this.article,
     required this.lightGreen,
     required this.fontStyleSemiBold,
+    required this.fontStyleBold,
     required this.darkBlue,
   }) : super(key: key);
 
@@ -17,9 +18,19 @@ class ArticleCard extends StatelessWidget {
   final Attributes? article;
   final Color lightGreen;
   final TextStyle fontStyleSemiBold;
+  final TextStyle fontStyleBold;
   final Color darkBlue;
   var imageUrl;
   var haveImage;
+  var fontStyleMessage = GoogleFonts.poppins(
+      fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16);
+  var fontStyleButton = GoogleFonts.poppins(
+      fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20);
+  var styleButton = ButtonStyle(
+      backgroundColor:
+          MaterialStateProperty.all<Color>(Color.fromRGBO(79, 192, 159, 1)),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))));
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +89,59 @@ class ArticleCard extends StatelessWidget {
                                   )));
                       break;
                     case 2:
-                      print(value);
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(32.0))),
+                              backgroundColor: darkBlue,
+                              title: Center(
+                                  child: Text('Are your sure?',
+                                      style: fontStyleBold)),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                        "Are you sure that you want to delete this? The items will be  deleted and permanently removed from your feed.",
+                                        textAlign: TextAlign.justify,
+                                        style: fontStyleMessage),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: 125,
+                                          child: TextButton(
+                                              style: styleButton,
+                                              child: Text('Cancel',
+                                                  style: fontStyleButton),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              }),
+                                        ),
+                                        SizedBox(
+                                          width: 125,
+                                          child: TextButton(
+                                              style: styleButton,
+                                              child: Text('Delete',
+                                                  style: fontStyleButton),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              }),
+                                        )
+                                      ])
+                                ],
+                              ),
+                            );
+                          });
                       break;
                   }
                 },
