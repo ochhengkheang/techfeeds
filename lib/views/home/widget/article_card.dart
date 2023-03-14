@@ -25,6 +25,8 @@ class ArticleCard extends StatelessWidget {
   final TextStyle fontStyleSemiBold;
   final TextStyle fontStyleBold;
   final Color darkBlue;
+
+  var status;
   var imageUrl;
   var haveImage;
   var fontStyleMessage = GoogleFonts.poppins(
@@ -82,17 +84,19 @@ class ArticleCard extends StatelessWidget {
                         imageUrl =
                             'https://cms.istad.co${article?.thumbnail?.data?.attributes?.url}';
                       }
+                      status =
+                          article?.status == null ? false : article?.status;
 
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddScreen(
-                                    article: article,
-                                    isUpdate: true,
-                                    id: id,
-                                    imageUrl: imageUrl,
-                                    haveImage: haveImage,
-                                  )));
+                                  article: article,
+                                  isUpdate: true,
+                                  id: id,
+                                  imageUrl: imageUrl,
+                                  haveImage: haveImage,
+                                  status: status)));
                       break;
                     case 2:
                       showDialog(

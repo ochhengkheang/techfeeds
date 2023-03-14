@@ -21,7 +21,8 @@ class AddScreen extends StatefulWidget {
       this.isUpdate = false,
       this.id,
       this.imageUrl,
-      this.haveImage})
+      this.haveImage,
+      this.status})
       : super(key: key);
 
   Attributes? article;
@@ -29,6 +30,7 @@ class AddScreen extends StatefulWidget {
   var id;
   var imageUrl;
   var haveImage;
+  var status;
 
   @override
   State<AddScreen> createState() => _AddScreenState();
@@ -84,13 +86,11 @@ class _AddScreenState extends State<AddScreen> {
       titleController.text = widget.article!.title!;
       slug = widget.article!.slug!;
       contentController.text = widget.article!.content!;
-      status = widget.article!.status!;
       //make change  to radius status to update if false or true
       radioValue = "$status";
-      if (widget.article!.thumbnail!.data == null)
-        widget.haveImage = false;
-      else
-        thumbnailId = widget.article!.thumbnail!.data!.id!;
+      widget.article!.thumbnail!.data == null
+          ? widget.haveImage = false
+          : thumbnailId = widget.article!.thumbnail!.data!.id!;
     }
   }
 
@@ -182,15 +182,7 @@ class _AddScreenState extends State<AddScreen> {
                               SnackBar(content: Text('Post Article Success')));
                         });
                       }
-                      if (imageViewModel.imageResponse.status ==
-                          Status.COMPLETED) {
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Image Upload Success')));
-                        });
-                      }
-                      if (articleViewModel.articleResponse.status ==
+                      if (articleViewModel.articlePutResponse.status ==
                           Status.COMPLETED) {
                         WidgetsBinding.instance
                             .addPostFrameCallback((timeStamp) {
@@ -198,9 +190,6 @@ class _AddScreenState extends State<AddScreen> {
                               SnackBar(content: Text('Put Success')));
                         });
                       }
-
-                      print(
-                          'image url ${imageViewModel.imageResponse.data?.url}');
                       return Center(
                         child: imageFile == null
                             ? widget.isUpdate
@@ -215,6 +204,22 @@ class _AddScreenState extends State<AddScreen> {
                             : Image.file(imageFile,
                                 fit: BoxFit.cover, width: 150, height: 150),
                       );
+                    }),
+                  ),
+                  ChangeNotifierProvider<ImageViewModel>(
+                    create: (BuildContext ctx) => imageViewModel,
+                    child: Consumer(builder: (ctx, image, _) {
+                      //get Article response status
+                      if (imageViewModel.imageResponse.status ==
+                          Status.COMPLETED) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Image Upload Success')));
+                        });
+                      }
+
+                      return Center();
                     }),
                   ),
                   Container(
