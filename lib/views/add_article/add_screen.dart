@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:dropdownfield2/dropdownfield2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -134,8 +135,10 @@ class _AddScreenState extends State<AddScreen> {
             ),
             leading: IconButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => HomeScreen()));
+                  });
                 },
                 icon: Icon(
                   Icons.arrow_back,
