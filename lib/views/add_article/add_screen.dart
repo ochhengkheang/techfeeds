@@ -13,6 +13,7 @@ import 'package:techfeeds/models/article_request.dart';
 import 'package:techfeeds/view_models/article_view_model.dart';
 import 'package:techfeeds/view_models/image_view_model.dart';
 import 'package:techfeeds/views/add_article/widget/article_textfield.dart';
+import 'package:techfeeds/views/add_article/widget/message_dialog.dart';
 import 'package:techfeeds/views/home/homescreen.dart';
 
 class AddScreen extends StatefulWidget {
@@ -49,7 +50,6 @@ class _AddScreenState extends State<AddScreen> {
 
   bool isUploaded = false;
   var radioValue;
-  var choice;
   var titleController = TextEditingController();
   var contentController = TextEditingController();
   @override
@@ -88,7 +88,7 @@ class _AddScreenState extends State<AddScreen> {
       slug = widget.article!.slug!;
       contentController.text = widget.article!.content!;
       //make change  to radius status to update if false or true
-      radioValue = "$status";
+      radioValue = "${widget.status}";
       widget.article!.thumbnail!.data == null
           ? widget.haveImage = false
           : thumbnailId = widget.article!.thumbnail!.data!.id!;
@@ -126,13 +126,22 @@ class _AddScreenState extends State<AddScreen> {
             automaticallyImplyLeading: false,
             flexibleSpace: Container(),
             elevation: 0,
-            title: Text(
-              "Create",
-              style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(18, 17, 56, 1),
-                  fontSize: 24),
-            ),
+            //title change according to Update or Post
+            title: widget.isUpdate
+                ? Text(
+                    "Update",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(18, 17, 56, 1),
+                        fontSize: 24),
+                  )
+                : Text(
+                    "Create",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(18, 17, 56, 1),
+                        fontSize: 24),
+                  ),
             leading: IconButton(
                 onPressed: () {
                   SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -183,14 +192,6 @@ class _AddScreenState extends State<AddScreen> {
                             .addPostFrameCallback((timeStamp) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Post Article Success')));
-                        });
-                      }
-                      if (articleViewModel.articlePutResponse.status ==
-                          Status.COMPLETED) {
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Put Success')));
                         });
                       }
                       return Center(
@@ -313,9 +314,11 @@ class _AddScreenState extends State<AddScreen> {
                       if (widget.isUpdate) {
                         // check for post or put
                         articleViewModel.putArticle(dataRequest, widget.id);
-                        print(dataRequest.thumbnail);
-                      } else
+                        messaageDialog(context, "Update Success");
+                      } else {
                         articleViewModel.postArticle(dataRequest);
+                        messaageDialog(context, "Post Success");
+                      }
                     }
                   } else {
                     _getImageFromGalleryOrCamera('camera');
@@ -340,7 +343,7 @@ class _AddScreenState extends State<AddScreen> {
     );
   }
 
-  //can't extract to another class since it is statful widget and return value status
+  //can't extract to another class since return value status + wiget
   Row statusRadio(BuildContext context) {
     return Row(
       children: [

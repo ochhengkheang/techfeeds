@@ -90,8 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   //each button fetch it own data base on category name search
                   textButton(Icons.home, 1, "ALL"),
                   textButton(Icons.web, 2, "Web Developer"),
-                  textButton(Icons.code, 3, "Programming"),
-                  textButton(Icons.code, 4, "AI / Big Data"),
+                  textButton(Icons.code, 3, "Programming Lauguage"),
+                  textButton(
+                      Icons.data_thresholding_outlined, 4, "AI / Big Data"),
                   textButton(Icons.analytics_outlined, 5, "Backend"),
                 ],
               ),

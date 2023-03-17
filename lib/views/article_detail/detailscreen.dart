@@ -30,10 +30,8 @@ class _DetailScreenState extends State<DetailScreen> {
         : 'https://cms.istad.co${widget.article?.thumbnail?.data?.attributes?.url}';
   }
 
-  var fontStyleBold = GoogleFonts.poppins(
-      fontWeight: FontWeight.bold,
-      color: Color.fromRGBO(79, 192, 159, 1),
-      fontSize: 25);
+  var fontStyleBold =
+      GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 25);
   var fontStyleContent = GoogleFonts.poppins(
       height: 1.8,
       fontWeight: FontWeight.w500,
