@@ -319,6 +319,7 @@ class _AddScreenState extends State<AddScreen> {
                         articleViewModel.postArticle(dataRequest);
                         messaageDialog(context, "Post Success");
                       }
+                      print("News ID: ${widget.id}");
                     }
                   } else {
                     _getImageFromGalleryOrCamera('camera');

@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Color.fromRGBO(79, 192, 159, 1),
       fontSize: 22);
 
+  var selectedIndex = 1;
   var onCategory = 1;
   var page = 1;
   int? maxPage;
@@ -146,7 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: darkBlue,
-        currentIndex: 1,
+        onTap: onBarItemTap,
+        currentIndex: selectedIndex,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
@@ -158,6 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void onBarItemTap(index) {
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
   TextButton textButton(var icon, var optionNumber, var title) {
